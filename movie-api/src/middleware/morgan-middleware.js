@@ -6,7 +6,7 @@ module.exports = morgan(
     config.NODE_ENV === 'development' ? 'dev' : 'combined',
     {
         stream: {
-            write: (message) => logger.info(message),
+            write: (message) => logger.info(message.trim()),
         },
     }
 );

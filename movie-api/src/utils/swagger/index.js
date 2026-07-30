@@ -1,4 +1,4 @@
-const swaggerJsdoc = request('swagger-jsdoc');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const options ={
     definition:{
@@ -15,7 +15,7 @@ const options ={
             }
         ]
     },
-    apis:['./src/controllers/*.js'],
+    apis:['./src/utils/swagger/*.yaml'],
 }; 
 
 module.exports = swaggerJsdoc(options);

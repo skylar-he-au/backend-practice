@@ -1,0 +1,63 @@
+const mongoose = require('mongoose');
+
+const reviewSchema = new mongoose.Schema({
+    rating: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5,
+    },
+    content: {
+        type: Number,
+        required: [true, 'Content is required'],
+        trim: true,
+    },
+}, {
+    timestamps: true,
+})
+
+const movieSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    types: {
+        type: [String],
+        validate: {
+            validator: (types) => {
+                return (
+                    types.length > 0 && types.every((type) => type.trim().length > 0)
+                );
+            },
+            message: 'At least one type is required',
+        },
+    },
+    averageRating: {
+        type: Number,
+        default: 0,
+    },
+    reviews: [reviewSchema],
+}, {
+    timestamps: true,
+});
+
+movieSchema.pre('save', function () {
+    if (this.reviews.length === 0) {
+        this.averageRating = 0;
+        return;
+    }
+    this.averageRating = +(
+        movie.reviews.reduce((sum, current) => sum + current.rating, 0) /
+        movie.reviews.length
+    ).toFixed(2);
+})
+
+const Movie = mongoose.model('Movie', movieSchema);
+
+module.exports = Movie;

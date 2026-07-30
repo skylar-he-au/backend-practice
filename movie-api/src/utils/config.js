@@ -13,7 +13,8 @@ const optionalConfigs = {
 }
 
 const requiredConfigs = {
-    REQUIRED: process.env.REQUIRED
+    DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
+    JWT_KEY: process.env.JWT_KEY
 }
 
 for (const key in requiredConfigs) {
