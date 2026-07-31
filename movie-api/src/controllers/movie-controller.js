@@ -15,7 +15,7 @@ const getAllMovies = async (req, res) => {
         ]
     }
 
-    const sortOption = {};
+    let sortOption = {};
     if (sort === 'rating') {
         sortOption = { averageRating: 1 }
     } else if (sort === 'rating') {
@@ -30,7 +30,7 @@ const getAllMovies = async (req, res) => {
         .limit(limit)
         .exec();
 
-    logger.debug('Movie returned successfully', { payload: { count: filteredMovies.length } });
+    logger.debug('Movie returned successfully', { payload: { count: filters.length } });
     res.json(movies);
 };
 
@@ -68,7 +68,7 @@ const updateMovieById = async (req, res) => {
 
 const deleteMovieById = async (req, res) => {
     const movie = await Movie.findByIdAndDelete(req.params.id).exec();
-    if (!movies) {
+    if (!movie) {
         res.status(404).json({
             message: "Movie not found",
         });
@@ -80,7 +80,7 @@ const deleteMovieById = async (req, res) => {
 
 const getReviewsByMovieId = async(req, res) => {
     const movie = await Movie.findById(req.params.id).select('reviews').exec();
-    if (!movies) {
+    if (!movie) {
         return res.status(404).json({
             message: "Movie not found",
         });
@@ -97,13 +97,14 @@ const addReviewByMovieId = async (req, res) => {
         return;
     }
 
-    movie.review.push({ content, rating });
+    const {content,rating}= req.body;
+    movie.reviews.push({ content, rating });
     // movie.averageRating = movie.reviews.length ? +(
     //     movie.reviews.reduce((sum, current) => sum + current.rating, 0) /
     //     movie.reviews.length
     // ).toFixed(2) : 0;
     await movie.save();
-    res.status(201).json(movies.reviews[movie.reviews.length - 1]);
+    res.status(201).json(movie.reviews[movie.reviews.length - 1]);
 }
 
 module.exports = {

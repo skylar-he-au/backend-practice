@@ -8,7 +8,7 @@ const reviewSchema = new mongoose.Schema({
         max: 5,
     },
     content: {
-        type: Number,
+        type: String,
         required: [true, 'Content is required'],
         trim: true,
     },
@@ -53,8 +53,8 @@ movieSchema.pre('save', function () {
         return;
     }
     this.averageRating = +(
-        movie.reviews.reduce((sum, current) => sum + current.rating, 0) /
-        movie.reviews.length
+        this.reviews.reduce((sum, current) => sum + current.rating, 0) /
+        this.reviews.length
     ).toFixed(2);
 })
 
