@@ -17,9 +17,9 @@ const getAllMovies = async (req, res) => {
 
     let sortOption = {};
     if (sort === 'rating') {
-        sortOption = { averageRating: 1 }
-    } else if (sort === 'rating') {
         sortOption = { averageRating: -1 }
+    } else if (sort === '-rating') {
+        sortOption = { averageRating: 1 }
     }
 
     const startIndex = (parseInt(page) - 1) * parseInt(limit);
@@ -85,7 +85,7 @@ const getReviewsByMovieId = async(req, res) => {
             message: "Movie not found",
         });
     }
-    res.json(movies.reviews);
+    res.json(movie.reviews);
 };
 
 const addReviewByMovieId = async (req, res) => {
